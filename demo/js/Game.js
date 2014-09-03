@@ -38,15 +38,30 @@
             this.character = this.add.sprite(this.world.centerX, this.world.centerY, 'character');
             this.character.anchor.set(0.5);
 
-            this.character.animations.add('walkDown', [0,1,2,3,4,5,6,7], 20 /*fps */, true);
-            this.character.animations.add('walkUp', [8,9,10,11,12,13,14], 20 /*fps */, true);
-            this.character.animations.add('walkLeft', [14,15,16,17,18,19,20], 20 /*fps */, true);
-            this.character.animations.add('walkRight', [21,22,23,24,25,26,27], 20 /*fps */, true);
+            this.character.animations.add('walkDown', [0 ,1 ,2 ,3 ,4 ,5 ,6 ,7], 20 /*fps */, true);
+            this.character.animations.add('walkUp',   [8 ,9 ,10,11,12,13,14,15], 20 /*fps */, true);
+            this.character.animations.add('walkLeft', [16,17,18,19,20,21,22,23], 20 /*fps */, true);
+            this.character.animations.add('walkRight',[24,25,26,27,28,29,30,31], 20 /*fps */, true);
             //this.character.animations.play('walkDown', 10, true);
             //this.character.animations.play('walkDown');
         },
         update: function() {
+            this.tilesprite.tilePosition.y += this.game.touchControl.speed.y / 10;
+            this.tilesprite.tilePosition.x += this.game.touchControl.speed.x / 10;
 
+            if(this.game.touchControl.cursors.up && Math.abs(this.game.touchControl.speed.y) >49){
+                this.character.play('walkUp');
+            }else if(this.game.touchControl.cursors.down && Math.abs(this.game.touchControl.speed.y) >49){
+                this.character.play('walkDown');
+            }else if(this.game.touchControl.cursors.left && Math.abs(this.game.touchControl.speed.x) >49){
+                this.character.play('walkLeft');
+            }else if(this.game.touchControl.cursors.right && Math.abs(this.game.touchControl.speed.x) >49){
+                this.character.play('walkRight');
+            }else {
+                this.character.animations.stop(0);
+            }
+                       
+            
         }
      };
 
