@@ -1,3 +1,4 @@
+/* global Phaser */
 /**
   * Phaser Touch Control Plugin
   * It adds a movement control for mobile and tablets devices
@@ -29,34 +30,42 @@
   */
 
 (function(window, Phaser) {
+	'use strict';
 	/**
-	  * StateTranistion Plugin for Phaser
+	  * TouchControl Plugin for Phaser
 	  */
 	Phaser.Plugin.TouchControl = function (game, parent) {
 		/* Extend the plugin */
 		Phaser.Plugin.call(this, game, parent);
 		this.input = this.game.input;
 
-		this.compass = this.game.add.sprite(0, 0, 'compass');
-		this.compass.anchor.set(0.5);
-		this.compass.visible=false;
+		this.imageGroup = [];
 
-		this.touchsegment1 = this.game.add.sprite(0, 0, 'touch_segment');
-		this.touchsegment1.anchor.set(0.5);
-		this.touchsegment1.visible=false;
-		this.touchsegment2 = this.game.add.sprite(0, 0, 'touch_segment');
-		this.touchsegment2.anchor.set(0.5);
-		this.touchsegment2.visible=false;
-		this.touch = this.game.add.sprite(0, 0, 'touch');
-		this.touch.anchor.set(0.5);
-		this.touch.visible=false;
-
+		this.imageGroup.push(this.game.add.sprite(0, 0, 'compass'));
+		this.imageGroup.push(this.game.add.sprite(0, 0, 'touch_segment'));
+		this.imageGroup.push(this.game.add.sprite(0, 0, 'touch_segment'));
+		this.imageGroup.push(this.game.add.sprite(0, 0, 'touch'));
+		
+		this.imageGroup.forEach(function (e) {
+			e.anchor.set(0.5);
+			e.visible=false;
+			e.fixedToCamera=true;
+		});
 	};
 
 	//Extends the Phaser.Plugin template, setting up values we need
 	Phaser.Plugin.TouchControl.prototype = Object.create(Phaser.Plugin.prototype);
 	Phaser.Plugin.TouchControl.prototype.constructor = Phaser.Plugin.TouchControl;
 
+	Phaser.Plugin.TouchControl.prototype.maxDistanceInPixels = 200;
+
+	Phaser.Plugin.TouchControl.prototype.cursors = {
+		up: false, down: false, left: false, right: false
+	};
+
+	Phaser.Plugin.TouchControl.prototype.speed = {
+		x:0, y:0
+	};
 
 	Phaser.Plugin.TouchControl.prototype.inputEnabled = function() {
 		
@@ -66,38 +75,35 @@
 
 	var initialPoint;
 	var createCompass = function(){
-		this.compass.x=this.input.worldX;
-		this.compass.y=this.input.worldY;
-		this.compass.visible=true;
-		this.compass.bringToTop();
-
-		this.touchsegment1.x=this.input.worldX;
-		this.touchsegment1.y=this.input.worldY;
-		this.touchsegment1.visible=true;
-		this.touchsegment1.bringToTop();
-
-		this.touchsegment2.x=this.input.worldX;
-		this.touchsegment2.y=this.input.worldY;
-		this.touchsegment2.visible=true;
-		this.touchsegment2.bringToTop();
-
-		this.touch.x=this.input.worldX;
-		this.touch.y=this.input.worldY;
-		this.touch.visible=true;
-		this.touch.bringToTop();
-
+		this.imageGroup.forEach(function (e) {
+			//e.x=this.input.worldX;
+			//e.y=this.input.worldY;
+			e.visible=true;
+			e.bringToTop();
 			
-
+			e.cameraOffset.x=this.input.worldX;
+			e.cameraOffset.y=this.input.worldY;
+			
+		}, this);
+		
 		this.preUpdate=setDirection.bind(this);
 
 		initialPoint=this.input.activePointer.position.clone();
 		
 	};
-	var removeCompass = function(){
-		this.compass.visible=false;
-		this.touchsegment1.visible=false;
-		this.touchsegment2.visible=false;
-		this.touch.visible=false;
+	var removeCompass = function () {
+		this.imageGroup.forEach(function(e){
+			e.visible = false;
+		});
+
+		this.cursors.up = false;
+		this.cursors.down = false;
+		this.cursors.left = false;
+		this.cursors.right = false;
+		
+		this.speed.x = 0;
+		this.speed.y = 0;
+		
 		this.preUpdate=empty;
 	};
 	
@@ -106,17 +112,30 @@
 
 	var setDirection = function() {
 		var d=initialPoint.distance(this.input.activePointer.position);
-		if(d>1){
-			var deltaX=this.input.activePointer.position.x-initialPoint.x;
-			var deltaY=this.input.activePointer.position.y-initialPoint.y;
-			this.touchsegment1.x=initialPoint.x+(deltaX)/3;
-			this.touchsegment2.x=initialPoint.x+(deltaX)/3*2;
-			this.touchsegment1.y=initialPoint.y+(deltaY)/3;
-			this.touchsegment2.y=initialPoint.y+(deltaY)/3*2;
-			this.touch.x=this.input.activePointer.position.x;
-			this.touch.y=this.input.activePointer.position.y;
-			
+
+		var deltaX=this.input.activePointer.position.x-initialPoint.x;
+		var deltaY=this.input.activePointer.position.y-initialPoint.y;
+		var angle = initialPoint.angle(this.input.activePointer.position);
+		
+		if(d>this.maxDistanceInPixels){
+			deltaX = Math.cos(angle) * this.maxDistanceInPixels;
+			deltaY = Math.sin(angle) * this.maxDistanceInPixels;
 		}
+
+		this.speed.x = parseInt((deltaX/this.maxDistanceInPixels) * 100 * -1, 10);
+		this.speed.y = parseInt((deltaY/this.maxDistanceInPixels)*100 * -1, 10);
+
+		
+		this.cursors.up = (deltaY < 0);
+		this.cursors.down = (deltaY > 0);
+		this.cursors.left = (deltaX < 0);
+		this.cursors.right = (deltaX > 0);
+		
+		this.imageGroup.forEach(function(e,i){
+			e.cameraOffset.x = initialPoint.x+(deltaX)*i/3;
+			e.cameraOffset.y = initialPoint.y+(deltaY)*i/3;
+		}, this);
+		
 	};
 	Phaser.Plugin.TouchControl.prototype.preUpdate = empty;
 
