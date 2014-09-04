@@ -57,7 +57,12 @@
 	Phaser.Plugin.TouchControl.prototype = Object.create(Phaser.Plugin.prototype);
 	Phaser.Plugin.TouchControl.prototype.constructor = Phaser.Plugin.TouchControl;
 
-	Phaser.Plugin.TouchControl.prototype.maxDistanceInPixels = 200;
+	Phaser.Plugin.TouchControl.prototype.settings = {
+		// max distance from itial touch
+		maxDistanceInPixels: 200,
+		singleDirection: false
+	};
+	
 
 	Phaser.Plugin.TouchControl.prototype.cursors = {
 		up: false, down: false, left: false, right: false
@@ -67,17 +72,19 @@
 		x:0, y:0
 	};
 
-	Phaser.Plugin.TouchControl.prototype.inputEnabled = function() {
-		
-		this.input.onDown.add(createCompass.bind(this));
-		this.input.onUp.add(removeCompass.bind(this));
+	Phaser.Plugin.TouchControl.prototype.inputEnable = function() {
+		this.input.onDown.add(createCompass, this);
+		this.input.onUp.add(removeCompass, this);
+	};
+
+	Phaser.Plugin.TouchControl.prototype.inputDisable = function() {
+		this.input.onDown.remove(createCompass, this);
+		this.input.onUp.remove(removeCompass, this);
 	};
 
 	var initialPoint;
 	var createCompass = function(){
 		this.imageGroup.forEach(function (e) {
-			//e.x=this.input.worldX;
-			//e.y=this.input.worldY;
 			e.visible=true;
 			e.bringToTop();
 			
@@ -112,18 +119,30 @@
 
 	var setDirection = function() {
 		var d=initialPoint.distance(this.input.activePointer.position);
+		var maxDistanceInPixels = this.settings.maxDistanceInPixels;
 
 		var deltaX=this.input.activePointer.position.x-initialPoint.x;
 		var deltaY=this.input.activePointer.position.y-initialPoint.y;
+
+		if(this.settings.singleDirection){
+			if(Math.abs(deltaX) > Math.abs(deltaY)){
+				deltaY = 0;
+				this.input.activePointer.position.y=initialPoint.y;
+			}else{
+				deltaX = 0;
+				this.input.activePointer.position.x=initialPoint.x;
+			}
+		}
 		var angle = initialPoint.angle(this.input.activePointer.position);
 		
-		if(d>this.maxDistanceInPixels){
-			deltaX = Math.cos(angle) * this.maxDistanceInPixels;
-			deltaY = Math.sin(angle) * this.maxDistanceInPixels;
+		
+		if(d>maxDistanceInPixels){
+			deltaX = Math.cos(angle) * maxDistanceInPixels;
+			deltaY = Math.sin(angle) * maxDistanceInPixels;
 		}
 
-		this.speed.x = parseInt((deltaX/this.maxDistanceInPixels) * 100 * -1, 10);
-		this.speed.y = parseInt((deltaY/this.maxDistanceInPixels)*100 * -1, 10);
+		this.speed.x = parseInt((deltaX/maxDistanceInPixels) * 100 * -1, 10);
+		this.speed.y = parseInt((deltaY/maxDistanceInPixels)*100 * -1, 10);
 
 		
 		this.cursors.up = (deltaY < 0);
