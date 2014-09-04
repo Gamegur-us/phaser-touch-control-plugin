@@ -33,26 +33,17 @@
 			//	+ lots of other required assets here
 
 		    this.load.spritesheet('character', 'assets/images/rpg_sprite_walk.png', 72, 96, 32);
-			
 			this.load.image('background', 'assets/images/background.png');
+			
+		    this.load.spritesheet('buttons', 'assets/images/buttons.png', 215, 41);
 
 
 			this.load.image('compass', 'assets/images/compass_rose.png');
 			this.load.image('touch_segment', 'assets/images/touch_segment.png');
 			this.load.image('touch', 'assets/images/touch.png');
 
-/*
-/var/www/games/phaser-legends/demo/assets/images/background_tiles.png
-/var/www/games/phaser-legends/demo/assets/images/compass_rose.png
-/var/www/games/phaser-legends/demo/assets/images/DAGRONS5_0.png
-/var/www/games/phaser-legends/demo/assets/images/orientation.jpg
-/var/www/games/phaser-legends/demo/assets/images/preloadr_bar.png
-/var/www/games/phaser-legends/demo/assets/images/rpg_sprite_walk.png
-/var/www/games/phaser-legends/demo/assets/images/touch.png
-/var/www/games/phaser-legends/demo/assets/images/touch_segment.png
-/var/www/games/phaser-legends/demo/assets/images/trees_1.png
-*/
-			
+
+
 		},
 
 		create: function () {
