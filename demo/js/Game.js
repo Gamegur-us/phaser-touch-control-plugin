@@ -72,6 +72,11 @@
             }, this);
             _button2.frame=0;
 
+            this.add.button(400, 740, 'githubstar', function () {
+                window.open('https://github.com/eugenioclrc/phaser-touch-control-plugin','_blank');
+            }, this,0,0,1,0).scale.set(0.5);
+
+
 
             var style = {font: '25px Arial', fill: '#ffffff', align: 'left', fontWeight: 'bold', stroke: '#000000', strokeThickness: 6};
             var tw = this.add.text(20, 20, 'Phaser Touch Plugin demo\nDeveloped by @eugenioclrc\nFor http://gamegur.us', style);
@@ -79,6 +84,7 @@
             tw.events.onInputDown.add(function(){
                 window.open('https://twitter.com/eugenioclrc','_blank');
             });
+
 
 
             this.directionsText = this.add.text(20, 740, '', style);

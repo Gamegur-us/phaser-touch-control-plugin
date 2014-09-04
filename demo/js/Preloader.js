@@ -36,6 +36,7 @@
 			this.load.image('background', 'assets/images/background.png');
 			
 		    this.load.spritesheet('buttons', 'assets/images/buttons.png', 215, 41);
+			this.load.spritesheet('githubstar', 'assets/images/github.png', 377, 75);
 
 
 			this.load.image('compass', 'assets/images/compass_rose.png');
