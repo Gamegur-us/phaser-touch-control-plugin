@@ -1,0 +1,13 @@
+images:
+http://opengameart.org/content/grass-with-moss
+http://opengameart.org/content/wall-grass-rock-stone-wood-and-dirt-480
+http://opengameart.org/content/2d-rpg-character-walk-spritesheet
+http://opengameart.org/content/lots-of-hyptosis-tiles-organized
+http://en.wikipedia.org/wiki/File:Compass_rose_en_04p.svg
+
+font:
+http://www.ffonts.net/Avalon-Quest.font
+
+sounds
+http://www.freesound.org/people/Erdie/sounds/167890/
+http://www.freesound.org/people/rap2h/sounds/115261/
