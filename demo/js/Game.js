@@ -73,12 +73,26 @@
             _button2.frame=0;
 
 
-            var text = "Phaser Touch Plugin demo\nDeveloped by @eugenioclrc\nFor http://gamegur.us";
             var style = {font: '25px Arial', fill: '#ffffff', align: 'left', fontWeight: 'bold', stroke: '#000000', strokeThickness: 6};
-    
-            this.add.text(20, 20, text, style);
+            var tw = this.add.text(20, 20, 'Phaser Touch Plugin demo\nDeveloped by @eugenioclrc\nFor http://gamegur.us', style);
+            tw.inputEnabled = true;
+            tw.events.onInputDown.add(function(){
+                window.open('https://twitter.com/eugenioclrc','_blank');
+            });
+
+
+            this.directionsText = this.add.text(20, 740, '', style);
+            this.velocityText = this.add.text(200, 740, '', style);
+        },
+        updateDebugText: function(){
+            this.directionsText.setText('directions: {\n  up: ' + this.game.touchControl.cursors.up +
+                ',\n  down: ' + this.game.touchControl.cursors.down + ',\n  left: ' + this.game.touchControl.cursors.left + 
+                ',\n  right: ' + this.game.touchControl.cursors.right + ',\n}');
+            this.velocityText.setText('velocity: {\n  x: ' + this.game.touchControl.speed.x + ',\n  y: ' + this.game.touchControl.speed.y + '\n}');
+
         },
         update: function() {
+            this.updateDebugText();
             var speed = this.game.touchControl.speed;
             var delay=0;
 
