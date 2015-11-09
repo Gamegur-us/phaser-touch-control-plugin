@@ -9,7 +9,7 @@
         //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
         /*this.game;        //  a reference to the currently running game
-        this.add;       //  used to add sprites, text, groups, etc 
+        this.add;       //  used to add sprites, text, groups, etc
         this.camera;    //  a reference to the game camera
         this.cache;     //  the game cache
         this.input;     //  the global input manager (you can access this.input.keyboard, this.input.mouse, as well from it)
@@ -30,7 +30,7 @@
 
     var easeInSpeed = function(x){
         return x * Math.abs(x) / 2000;
-    }
+    };
 
     BasicGame.Game.prototype = {
         create: function () {
@@ -47,7 +47,7 @@
             this.character.animations.add('walkUp',   [8 ,9 ,10,11,12,13,14,15], 20 /*fps */, true);
             this.character.animations.add('walkLeft', [16,17,18,19,20,21,22,23], 20 /*fps */, true);
             this.character.animations.add('walkRight',[24,25,26,27,28,29,30,31], 20 /*fps */, true);
-            
+
 
             var _button1 = this.add.button(400, 80, 'buttons', function () {
                 if (_button1.frame===1) {
@@ -92,7 +92,7 @@
         },
         updateDebugText: function(){
             this.directionsText.setText('directions: {\n  up: ' + this.game.touchControl.cursors.up +
-                ',\n  down: ' + this.game.touchControl.cursors.down + ',\n  left: ' + this.game.touchControl.cursors.left + 
+                ',\n  down: ' + this.game.touchControl.cursors.down + ',\n  left: ' + this.game.touchControl.cursors.left +
                 ',\n  right: ' + this.game.touchControl.cursors.right + ',\n}');
             this.velocityText.setText('velocity: {\n  x: ' + this.game.touchControl.speed.x + ',\n  y: ' + this.game.touchControl.speed.y + '\n}');
 
@@ -107,10 +107,10 @@
             // Also you could try linear speed;
             //this.tilesprite.tilePosition.y += this.game.touchControl.speed.y / 20;
             //this.tilesprite.tilePosition.x += this.game.touchControl.speed.x / 20;
-            
+
             if (Math.abs(speed.y) < Math.abs(speed.x)){
                 delay = parseInt(1000 / Math.abs((easeInSpeed(speed.x)) * 10), 10);
-                
+
                 // moving mainly right or left
                 if (this.game.touchControl.cursors.left) {
                     this.character.play('walkLeft');
