@@ -22,7 +22,7 @@ var BasicGame = {
     BasicGame.Boot.prototype = {
 
         preload: function () {
-      
+
             //  Here we load the assets required for our preloader (in this case a background and a loading bar)
             this.load.image('preloaderBar', 'assets/images/preloadr_bar.png');
             this.stage.backgroundColor = '#444';
@@ -30,7 +30,7 @@ var BasicGame = {
         },
 
         create: function () {
-            
+
             this.input.maxPointers = 1;
             this.stage.disableVisibilityChange = true;
 
@@ -41,12 +41,11 @@ var BasicGame = {
                 //this.scale.minHeight = 480;
                 this.scale.minWidth = 256;
                 this.scale.minHeight = 384;
-                
+
                 this.scale.maxWidth = 640;
                 this.scale.maxHeight = 960;
                 this.scale.pageAlignHorizontally = true;
                 this.scale.pageAlignVertically = true;
-                this.scale.setScreenSize(true);
             } else {
                 this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
                 this.scale.minWidth = 256;
@@ -59,7 +58,6 @@ var BasicGame = {
                 this.scale.hasResized.add(this.gameResized, this);
                 this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
                 this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
-                this.scale.setScreenSize(true);
             }
 
             this.state.start('Preloader');
