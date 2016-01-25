@@ -39,7 +39,7 @@ var BasicGame = {
             this.scale.minWidth = 256;
             this.scale.minHeight = (256 * this.scale.maxHeight) / (this.scale.maxWidth);
 
-
+ 
             if (this.game.device.desktop)
             {
                 this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
