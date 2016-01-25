@@ -34,31 +34,28 @@ var BasicGame = {
             this.input.maxPointers = 1;
             this.stage.disableVisibilityChange = true;
 
+            this.scale.maxWidth = 640;
+            this.scale.maxHeight = 960;
+            this.scale.minWidth = 256;
+            this.scale.minHeight = (256 * this.scale.maxHeight) / (this.scale.maxWidth);
+
+
             if (this.game.device.desktop)
             {
                 this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-                //this.scale.minWidth = 320;
-                //this.scale.minHeight = 480;
-                this.scale.minWidth = 256;
-                this.scale.minHeight = 384;
 
-                this.scale.maxWidth = 640;
-                this.scale.maxHeight = 960;
                 this.scale.pageAlignHorizontally = true;
                 this.scale.pageAlignVertically = true;
             } else {
                 this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-                this.scale.minWidth = 256;
-                this.scale.minHeight = 384;
-                this.scale.maxWidth = 640;
-                this.scale.maxHeight = 960;
                 this.scale.pageAlignHorizontally = true;
                 this.scale.pageAlignVertically = true;
                 this.scale.forceOrientation(false,true);
-                this.scale.hasResized.add(this.gameResized, this);
+              //  this.scale.onResize = this.gameResized.bind(this);
                 this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
                 this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
             }
+            //this.game.scale.setScreenSize(true);
 
             this.state.start('Preloader');
 
